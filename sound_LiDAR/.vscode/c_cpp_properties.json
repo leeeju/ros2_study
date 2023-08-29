@@ -1,0 +1,37 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/turtle/robot_ws/install/velocity_controllers/include/**",
+        "/home/turtle/robot_ws/install/transmission_interface/include/**",
+        "/home/turtle/robot_ws/install/test_robot_hardware/include/**",
+        "/home/turtle/robot_ws/install/position_controllers/include/**",
+        "/home/turtle/robot_ws/install/moveit_msgs/include/**",
+        "/home/turtle/robot_ws/install/joint_trajectory_controller/include/**",
+        "/home/turtle/robot_ws/install/joint_state_controller/include/**",
+        "/home/turtle/robot_ws/install/joint_limits_interface/include/**",
+        "/home/turtle/robot_ws/install/effort_controllers/include/**",
+        "/home/turtle/robot_ws/install/forward_command_controller/include/**",
+        "/home/turtle/robot_ws/install/diff_drive_controller/include/**",
+        "/home/turtle/robot_ws/install/controller_manager/include/**",
+        "/home/turtle/robot_ws/install/controller_interface/include/**",
+        "/home/turtle/robot_ws/install/hardware_interface/include/**",
+        "/home/turtle/robot_ws/install/growth_meter_application/include/**",
+        "/home/turtle/robot_ws/install/dsr_msgs2/include/**",
+        "/home/turtle/robot_ws/install/controller_manager_msgs/include/**",
+        "/opt/ros/foxy/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

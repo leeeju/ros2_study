@@ -1,0 +1,24 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/turtle/robot_ws/build/dsr_example2_py",
+        "/home/turtle/robot_ws/install/dsr_example2_py/lib/python3.8/site-packages",
+        "/home/turtle/robot_ws/install/moveit_msgs/lib/python3.8/site-packages",
+        "/home/turtle/robot_ws/build/j_LiDAR",
+        "/home/turtle/robot_ws/install/j_LiDAR/lib/python3.8/site-packages",
+        "/home/turtle/robot_ws/install/growth_meter_application/lib/python3.8/site-packages",
+        "/home/turtle/robot_ws/install/dsr_msgs2/lib/python3.8/site-packages",
+        "/home/turtle/robot_ws/install/controller_manager_msgs/lib/python3.8/site-packages",
+        "/opt/ros/foxy/lib/python3.8/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/turtle/robot_ws/build/dsr_example2_py",
+        "/home/turtle/robot_ws/install/dsr_example2_py/lib/python3.8/site-packages",
+        "/home/turtle/robot_ws/install/moveit_msgs/lib/python3.8/site-packages",
+        "/home/turtle/robot_ws/build/j_LiDAR",
+        "/home/turtle/robot_ws/install/j_LiDAR/lib/python3.8/site-packages",
+        "/home/turtle/robot_ws/install/growth_meter_application/lib/python3.8/site-packages",
+        "/home/turtle/robot_ws/install/dsr_msgs2/lib/python3.8/site-packages",
+        "/home/turtle/robot_ws/install/controller_manager_msgs/lib/python3.8/site-packages",
+        "/opt/ros/foxy/lib/python3.8/site-packages"
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/cwsfa/robot_ws/build/j_LiDAR",
+        "/home/cwsfa/robot_ws/install/j_LiDAR/lib/python3.10/site-packages",
+        "/home/cwsfa/robot_ws/build/study_j",
+        "/home/cwsfa/robot_ws/install/study_j/lib/python3.10/site-packages",
+        "/home/cwsfa/robot_ws/install/sbg_driver/local/lib/python3.10/dist-packages",
+        "/home/cwsfa/robot_ws/install/hector_gazebo_plugins/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/cwsfa/robot_ws/build/j_LiDAR",
+        "/home/cwsfa/robot_ws/install/j_LiDAR/lib/python3.10/site-packages",
+        "/home/cwsfa/robot_ws/build/study_j",
+        "/home/cwsfa/robot_ws/install/study_j/lib/python3.10/site-packages",
+        "/home/cwsfa/robot_ws/install/sbg_driver/local/lib/python3.10/dist-packages",
+        "/home/cwsfa/robot_ws/install/hector_gazebo_plugins/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}
