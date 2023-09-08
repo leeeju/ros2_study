@@ -2,6 +2,11 @@
 
 from rclpy.node import Node
 from std_msgs.msg import Int32MultiArray
+
+import csv
+import datetime
+import os
+import time
 import rclpy
 import socket
 import struct
@@ -39,19 +44,37 @@ POINT_SIZE_BYTES = 4
 class SDKNode(Node):
     def __init__(self):
         super().__init__('sdk_node')
-        self.get_logger().info("GPR Node Started")
-        self.data_publisher = self.create_publisher(Int32MultiArray, 'gpr_data', 10)
+        self.get_logger().info("Sdk Node Started")
+        self.data_publisher = self.create_publisher(Int32MultiArray, 'sdk_data', 10)
+        # Create a directory to store the data
+        self.data_path = os.path.join(os.path.expanduser('~'), 'sdk_data')
+        if not os.path.exists(self.data_path):
+            os.makedirs(self.data_path)
+        self.csv_file_name = datetime.datetime.now().strftime('sdk_%Y%m%d_%H%M%S') + '.csv'
+        self.csv_file_path = os.path.join(self.data_path, self.csv_file_name)
+        self.init_csv_file()
+
+    def init_csv_file(self):
+        if not os.path.exists(self.csv_file_path):
+            with open(self.csv_file_path, 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['tv_sec', 'tv_nsec', 'trace_num', 'status', 'stacks', 'header_size'])
+
+    def log_data(self, data):
+        with open(self.csv_file_path, 'a', newline='') as file:
+            writer2 = csv.writer(file)
+            writer2.writerow(data)
 
     def get_requests(self, command, command_str_name, data=None):
         try:
             response = requests.put(command, data=data)
             json_response = json.loads(response.content)
-            print("Response from {} command: {}\n".format(command_str_name, json_response["status"]["message"]))
+            self.get_logger().info("Response from {} command: {}\n".format(command_str_name, json_response["status"]["message"]))
         except ValueError as err:
-            print("Unable to decode JSON: {}\n".format(err))
+            self.get_logger().info("Unable to decode JSON: {}\n".format(err))
 
         if json_response["status"]["status_code"] != 0:
-            print("Command failed: {}".format(json_response["status"]["message"]))
+            self.get_logger().info("Command failed: {}".format(json_response["status"]["message"]))
             json_response = None
         return json_response
 
@@ -71,23 +94,24 @@ class SDKNode(Node):
         try:
             response = requests.put(command, data=data)
             json_response = json.loads(response.content)
-            print("Response from {} command: {}\n".format(command_str_name, json_response["status"]["message"]))
+            self.get_logger().info("Response from {} command: {}\n".format(command_str_name, json_response["status"]["message"]))
         except ValueError as err:
             print("Unable to decode JSON: {}\n".format(err))
         if json_response["status"]["status_code"] != 0:
-                print("Command failed: {}".format(json_response["status"]["message"]))
+                self.get_logger().info("Command failed: {}".format(json_response["status"]["message"]))
                 json_response = None
         return json_response
+
     nic_system_information_response = get_requests(NIC_SYSTEM_INFO_CMD, "NIC's System Information")
     nic_system_info_response_data = nic_system_information_response['data']
     # Print the NIC500 system information
     print(("System Information:\nApp DIP: {}\nApp Version: {}\nFPGA Version: {}\nHardware ID: {}\nKernel Version: {}\n"
     "NIC Serial Number: {}\nOS DIP: {}\nOS Version: {}\nSmcApi: {} \n").format(
-      nic_system_info_response_data['app_dip'],         nic_system_info_response_data['app_version']
-    , nic_system_info_response_data['app_dip'],         nic_system_info_response_data['fpga_version']
-    , nic_system_info_response_data['kernel_version'],  nic_system_info_response_data['hardware_id']
+      nic_system_info_response_data['app_dip'],           nic_system_info_response_data['app_version']
+    , nic_system_info_response_data['app_dip'],           nic_system_info_response_data['fpga_version']
+    , nic_system_info_response_data['kernel_version'],    nic_system_info_response_data['hardware_id']
     , nic_system_info_response_data['nic_serial_number'], nic_system_info_response_data['os_dip']
-    , nic_system_info_response_data['os_version'],      nic_system_info_response_data['smc_api_build']))
+    , nic_system_info_response_data['os_version'],        nic_system_info_response_data['smc_api_build']))
 
         # Use the NIC Power command to turn on the GPR
     power_on_response = get_requests(POWER_CMD, POWER_ON_CONFIGURATION, "Power")
@@ -153,7 +177,7 @@ class SDKNode(Node):
     gpr_data_size_bytes = HEADER_SIZE_BYTES + (POINTS_PER_TRACE * POINT_SIZE_BYTES)
     num_traces_received = 0
     trace_num = 0
-    # Continue printing traces until we receive 10
+    ## Continue printing traces until we receive 10
     while trace_num < 10000:
         gpr_data = gpr_data + data_socket.recv(gpr_data_size_bytes)
         # Calculate the number traces received by the socket
@@ -172,9 +196,9 @@ class SDKNode(Node):
                                                                                                                     header_size))
             first_ten_trace_points = np.frombuffer(s[0:40], dtype=np.float32)
             print("First ten points (mV): {} \n".format(first_ten_trace_points))
-
             # Publish the data as a ROS 2 message
             data_msg = Int32MultiArray(data=[tv_sec, tv_nsec, trace_num, status, stacks, header_size])
+            time.sleep(1)
             self.data_publisher.publish(data_msg)
 
         # Use the GPR data acquisition command to stop data collection
@@ -182,15 +206,14 @@ class SDKNode(Node):
         # Close data socket
         data_socket.close()
 
-
 def main(args=None):
     rclpy.init(args=args)
-    sdk_node = SDKNode()
+    gpr_node = SDKNode()
     try:
-        rclpy.spin(sdk_node)
+        rclpy.spin(gpr_node)
     except KeyboardInterrupt:
         pass
-    sdk_node.destroy_node()
+    gpr_node.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
